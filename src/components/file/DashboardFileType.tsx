@@ -139,8 +139,16 @@ export default function DashboardFileType({
     }
   }, []);
 
-  if (disableMediaPreview && !show)
-    return <Placeholder text={`Click to view file ${file.name}`} Icon={fileIcon(file.type)} />;
+  if (disableMediaPreview && !show) {
+    let displayedName: string;
+    if (dbFile) {
+      displayedName = file.originalName ?? file.name;
+    } else {
+      displayedName = file.name;
+    }
+
+    return <Placeholder text={`Click to view file ${displayedName}`} Icon={fileIcon(file.type)} />;
+  }
 
   if (dbFile && file.password === true && !show)
     return <Placeholder text={`Click to view protected ${file.name}`} Icon={IconShieldLockFilled} />;
@@ -149,7 +157,7 @@ export default function DashboardFileType({
     return (
       <Paper withBorder p='xs' style={{ cursor: 'pointer' }}>
         <Placeholder
-          text={`Click to view protected ${file.name}`}
+          text={`Click to view protected ${file.originalName ?? file.name}`}
           Icon={IconShieldLockFilled}
           onClick={() => window.open(`/view/${file.name}${password ? `?pw=${password}` : ''}`)}
         />
@@ -188,7 +196,10 @@ export default function DashboardFileType({
           </Center>
         </Box>
       ) : (
-        <Placeholder text={`Click to play video ${file.name}`} Icon={fileIcon(file.type)} />
+        <Placeholder
+          text={`Click to play video ${dbFile ? (file.originalName ?? file.name) : file.name}`}
+          Icon={fileIcon(file.type)}
+        />
       );
     case 'image':
       return show ? (
@@ -241,7 +252,10 @@ export default function DashboardFileType({
           src={dbFile ? `/raw/${file.name}${password ? `?pw=${password}` : ''}` : URL.createObjectURL(file)}
         />
       ) : (
-        <Placeholder text={`Click to play audio ${file.name}`} Icon={fileIcon(file.type)} />
+        <Placeholder
+          text={`Click to play audio ${dbFile ? (file.originalName ?? file.name) : file.name}`}
+          Icon={fileIcon(file.type)}
+        />
       );
     case 'text':
       return show ? (
@@ -269,14 +283,19 @@ export default function DashboardFileType({
       );
     default:
       if (dbFile && !show)
-        return <Placeholder text={`Click to view file ${file.name}`} Icon={fileIcon(file.type)} />;
+        return (
+          <Placeholder
+            text={`Click to view file ${file.originalName ?? file.name}`}
+            Icon={fileIcon(file.type)}
+          />
+        );
 
       if (dbFile && show)
         return (
           <Paper withBorder p='xs' style={{ cursor: 'pointer' }}>
             <Placeholder
               onClick={() => window.open(`/raw/${file.name}${password ? `?pw=${password}` : ''}`)}
-              text={`Click to view file ${file.name} in a new tab`}
+              text={`Click to view file ${file.originalName ?? file.name} in a new tab`}
               Icon={fileIcon(file.type)}
             />
           </Paper>

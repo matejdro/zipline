@@ -185,7 +185,7 @@ export default function FileModal({
         onClose={() => setOpen(false)}
         title={
           <Text size='xl' fw={700}>
-            {file?.name ?? ''}
+            {file?.originalName ?? file?.name}
           </Text>
         }
         size='auto'
@@ -222,9 +222,7 @@ export default function FileModal({
                 title='Views'
                 value={file.maxViews ? `${file.views} / ${file.maxViews}` : file.views}
               />
-              {file.originalName && (
-                <FileStat Icon={IconTextRecognition} title='Original Name' value={file.originalName} />
-              )}
+              {file.name && <FileStat Icon={IconTextRecognition} title='URL Name' value={file.name} />}
             </SimpleGrid>
 
             {!reduce && (

@@ -423,6 +423,19 @@ export default function FileTable({ id }: { id?: string }) {
           records={data?.page ?? []}
           columns={[
             {
+              accessor: 'originalName',
+              sortable: true,
+              filter: (
+                <SearchFilter
+                  setSearchField={setSearchField}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  field='originalName'
+                />
+              ),
+              filtering: searchField === 'name' && searchQuery.name.trim() !== '',
+            },
+            {
               accessor: 'name',
               sortable: true,
               filter: (
